@@ -1,0 +1,12 @@
+{
+  "name": "leaddesk-mini-workspace",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Root workspace script runner for LeadDesk Mini",
+  "scripts": {
+    "dev": "npm --prefix client run dev",
+    "dev:server": "npm --prefix server run dev",
+    "build": "npm --prefix client run build",
+    "seed": "npm --prefix server run seed"
+  }
+}
