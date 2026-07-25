@@ -31,7 +31,16 @@ export const Footer: React.FC = () => {
         >
           {/* About Blurb */}
           <div style={{ maxWidth: '540px', lineHeight: 1.5, color: '#475569' }}>
-            LeadDesk Mini — a lead capture and management tool, built as part of a full-stack development submission by Akshay.
+            LeadDesk Mini —{' '}
+            <a
+              href="https://digitalheroesco.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: '#2563eb', fontWeight: 600, textDecoration: 'underline' }}
+            >
+              Built for Digital Heroes Training Task
+            </a>
+            . A full-stack lead capture and management portal.
           </div>
 
           {/* Social Icons & Terms */}
@@ -94,7 +103,7 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* Bottom Row: Copyright */}
+        {/* Bottom Row: Copyright & Official Credit */}
         <div
           style={{
             borderTop: '1px solid #f1f5f9',
@@ -102,12 +111,31 @@ export const Footer: React.FC = () => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            fontSize: '0.8rem',
+            flexWrap: 'wrap',
+            gap: '0.5rem',
+            fontSize: '0.825rem',
             color: '#94a3b8'
           }}
         >
           <div>© {new Date().getFullYear()} LeadDesk Mini. All rights reserved.</div>
-          <div>Built by Akshay</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <a
+              href="https://digitalheroesco.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                color: '#2563eb',
+                fontWeight: 700,
+                textDecoration: 'none'
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.textDecoration = 'underline')}
+              onMouseLeave={(e) => (e.currentTarget.style.textDecoration = 'none')}
+            >
+              Built for Digital Heroes Training Task
+            </a>
+            <span style={{ color: '#cbd5e1' }}>•</span>
+            <span>Built by Akshay</span>
+          </div>
         </div>
       </footer>
 

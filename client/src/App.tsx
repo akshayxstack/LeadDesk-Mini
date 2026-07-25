@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { LandingPage } from './pages/LandingPage';
 import { AdminLogin } from './pages/AdminLogin';
+import { AdminSignup } from './pages/AdminSignup';
 import { AdminDashboard } from './pages/AdminDashboard';
 
 export const App: React.FC = () => {
@@ -18,6 +19,12 @@ export const App: React.FC = () => {
         <Route
           path="/admin/login"
           element={<AdminLogin onLoginSuccess={(newToken) => setToken(newToken)} />}
+        />
+
+        {/* /admin/signup — Admin account registration page */}
+        <Route
+          path="/admin/signup"
+          element={<AdminSignup onSignupSuccess={(newToken) => setToken(newToken)} />}
         />
 
         {/* /admin — Protected leads dashboard */}

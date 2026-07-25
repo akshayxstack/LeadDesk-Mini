@@ -3,31 +3,33 @@ import { useNavigate, Link } from 'react-router-dom';
 import { api } from '../lib/api';
 import { Footer } from '../components/Footer';
 import { 
+  UserPlus, 
   User, 
   Lock, 
   AlertCircle, 
   Loader2, 
-  ArrowLeft, 
-  Eye, 
-  EyeOff, 
-  ShieldCheck, 
-  TrendingUp, 
+  ArrowLeft,
+  Eye,
+  EyeOff,
+  ShieldCheck,
+  TrendingUp,
   Sparkles,
   Users,
   CheckCircle2,
   ArrowRight
 } from 'lucide-react';
 
-interface AdminLoginProps {
-  onLoginSuccess: (token: string) => void;
+interface AdminSignupProps {
+  onSignupSuccess: (token: string) => void;
 }
 
-export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
+export const AdminSignup: React.FC<AdminSignupProps> = ({ onSignupSuccess }) => {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -35,19 +37,35 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
     e.preventDefault();
     setError(null);
 
-    if (!username.trim() || !password) {
-      setError('Please enter both your username and password.');
+    const trimmedUsername = username.trim();
+    if (!trimmedUsername || !password) {
+      setError('Please fill in all fields.');
+      return;
+    }
+
+    if (trimmedUsername.length < 3) {
+      setError('Username must be at least 3 characters long.');
+      return;
+    }
+
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters long.');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError('Passwords do not match.');
       return;
     }
 
     setIsLoading(true);
 
     try {
-      const response = await api.login(username.trim(), password);
-      onLoginSuccess(response.token);
+      const response = await api.register(trimmedUsername, password);
+      onSignupSuccess(response.token);
       navigate('/admin');
     } catch (err: any) {
-      setError(err.message || 'Invalid username or password.');
+      setError(err.message || 'Failed to create account. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -116,7 +134,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
             width: '100%'
           }}
         >
-          {/* Left Column: Brand Showcase (Landing Page Aesthetic) */}
+          {/* Left Column: Brand Showcase */}
           <div
             style={{
               display: 'flex',
@@ -124,7 +142,6 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
               justifyContent: 'center'
             }}
           >
-            {/* Tag / Badge */}
             <span
               style={{
                 color: '#2563eb',
@@ -138,7 +155,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
                 gap: '0.5rem'
               }}
             >
-              <ShieldCheck size={18} /> ADMIN CONTROL PORTAL
+              <UserPlus size={18} /> ADMIN REGISTRATION
             </span>
 
             <h1
@@ -151,8 +168,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
                 letterSpacing: '-0.02em'
               }}
             >
-              Manage & Convert <br />
-              Your Leads{' '}
+              Join the Admin Team & <br />
               <span
                 style={{
                   background: 'linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)',
@@ -160,7 +176,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
                   WebkitTextFillColor: 'transparent'
                 }}
               >
-                With Precision.
+                Empower Growth.
               </span>
             </h1>
 
@@ -173,10 +189,9 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
                 maxWidth: '460px'
               }}
             >
-              Access real-time lead submissions, assign priority statuses, track client budgets, and streamline your sales operations.
+              Create your administrator account to take full control of inbound leads, streamline team actions, and monitor performance.
             </p>
 
-            {/* Feature Bullets */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '2.5rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.875rem' }}>
                 <div
@@ -191,7 +206,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
                   <TrendingUp size={18} />
                 </div>
                 <span style={{ fontSize: '0.95rem', color: '#334155', fontWeight: 600 }}>
-                  Real-time lead updates & status management
+                  Unified CRM dashboard for fast lead triage
                 </span>
               </div>
 
@@ -208,7 +223,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
                   <ShieldCheck size={18} />
                 </div>
                 <span style={{ fontSize: '0.95rem', color: '#334155', fontWeight: 600 }}>
-                  Secure JWT authenticated admin session
+                  High-security credentials with instant JWT issuing
                 </span>
               </div>
 
@@ -225,12 +240,11 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
                   <Sparkles size={18} />
                 </div>
                 <span style={{ fontSize: '0.95rem', color: '#334155', fontWeight: 600 }}>
-                  Instant search, budget filters & export analytics
+                  Full lead history & budget segmentation
                 </span>
               </div>
             </div>
 
-            {/* Metric Floating Badge */}
             <div
               className="float-badge"
               style={{
@@ -250,22 +264,22 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
                   width: '10px',
                   height: '10px',
                   borderRadius: '50%',
-                  backgroundColor: '#10b981',
-                  boxShadow: '0 0 10px #10b981'
+                  backgroundColor: '#2563eb',
+                  boxShadow: '0 0 10px #2563eb'
                 }}
               />
               <div>
                 <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#0f172a' }}>
-                  System Active & Secured
+                  Fast Onboarding
                 </div>
                 <div style={{ fontSize: '0.75rem', color: '#64748b' }}>
-                  256-bit Encrypted Session Security
+                  Instant access to Lead Management Console
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Sleek Light Theme Auth Card */}
+          {/* Right Column: Auth Form Card */}
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <div
               className="auth-card-elevated"
@@ -275,7 +289,6 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
                 maxWidth: '430px'
               }}
             >
-              {/* Header inside Card */}
               <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
                 <div
                   style={{
@@ -291,17 +304,16 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
                     boxShadow: '0 4px 12px rgba(37, 99, 235, 0.15)'
                   }}
                 >
-                  <User size={28} />
+                  <UserPlus size={28} />
                 </div>
                 <h2 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#0f172a', marginBottom: '0.35rem' }}>
-                  Admin Login
+                  Create Admin Account
                 </h2>
                 <p style={{ color: '#64748b', fontSize: '0.9rem' }}>
-                  Sign in to access your administrative dashboard
+                  Register to start managing leads effectively
                 </p>
               </div>
 
-              {/* Error Alert Box */}
               {error && (
                 <div
                   className="alert-error"
@@ -317,10 +329,10 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
               )}
 
               <form onSubmit={handleSubmit}>
-                {/* Username Input */}
+                {/* Username Field */}
                 <div style={{ marginBottom: '1.25rem' }}>
                   <label
-                    htmlFor="username-input"
+                    htmlFor="signup-username-input"
                     style={{
                       display: 'block',
                       fontSize: '0.85rem',
@@ -344,9 +356,9 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
                       }}
                     />
                     <input
-                      id="username-input"
+                      id="signup-username-input"
                       type="text"
-                      placeholder="Enter your username"
+                      placeholder="Choose a username"
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
                       className="auth-input-field"
@@ -356,10 +368,10 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
                   </div>
                 </div>
 
-                {/* Password Input */}
+                {/* Password Field */}
                 <div style={{ marginBottom: '1.25rem' }}>
                   <label
-                    htmlFor="password-input"
+                    htmlFor="signup-password-input"
                     style={{
                       display: 'block',
                       fontSize: '0.85rem',
@@ -383,13 +395,13 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
                       }}
                     />
                     <input
-                      id="password-input"
+                      id="signup-password-input"
                       type={showPassword ? 'text' : 'password'}
-                      placeholder="Enter your password"
+                      placeholder="Create a password (min. 6 chars)"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       className="auth-input-field"
-                      autoComplete="current-password"
+                      autoComplete="new-password"
                       required
                     />
                     <button
@@ -404,44 +416,57 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
                   </div>
                 </div>
 
-                {/* Remember Me Option */}
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    marginBottom: '1.5rem',
-                    fontSize: '0.85rem'
-                  }}
-                >
+                {/* Confirm Password Field */}
+                <div style={{ marginBottom: '1.5rem' }}>
                   <label
+                    htmlFor="signup-confirm-password-input"
                     style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '0.5rem',
-                      color: '#475569',
-                      cursor: 'pointer',
-                      userSelect: 'none'
+                      display: 'block',
+                      fontSize: '0.85rem',
+                      fontWeight: 600,
+                      color: '#334155',
+                      marginBottom: '0.4rem'
                     }}
                   >
-                    <input
-                      type="checkbox"
-                      checked={rememberMe}
-                      onChange={(e) => setRememberMe(e.target.checked)}
+                    Confirm Password
+                  </label>
+                  <div style={{ position: 'relative' }}>
+                    <Lock
+                      size={18}
                       style={{
-                        width: '16px',
-                        height: '16px',
-                        accentColor: '#2563eb',
-                        borderRadius: '4px',
-                        cursor: 'pointer'
+                        position: 'absolute',
+                        left: '0.9rem',
+                        top: '50%',
+                        transform: 'translateY(-50%)',
+                        color: '#94a3b8',
+                        pointerEvents: 'none'
                       }}
                     />
-                    Remember me
-                  </label>
+                    <input
+                      id="signup-confirm-password-input"
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      placeholder="Confirm your password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      className="auth-input-field"
+                      autoComplete="new-password"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      className="password-toggle-btn"
+                      title={showConfirmPassword ? 'Hide password' : 'Show password'}
+                      aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
+                    >
+                      {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
                 </div>
 
                 {/* Submit Button */}
                 <button
-                  id="login-submit-btn"
+                  id="signup-submit-btn"
                   type="submit"
                   disabled={isLoading}
                   className="auth-submit-btn"
@@ -449,16 +474,42 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
                   {isLoading ? (
                     <>
                       <Loader2 size={18} style={{ animation: 'spin 1s linear infinite' }} />
-                      Authenticating...
+                      Creating Account...
                     </>
                   ) : (
                     <>
-                      Sign In to Dashboard
+                      Create Account
                       <ArrowRight size={18} />
                     </>
                   )}
                 </button>
               </form>
+
+              {/* Login Link Redirect */}
+              <div
+                style={{
+                  marginTop: '1.75rem',
+                  paddingTop: '1.25rem',
+                  borderTop: '1px solid #f1f5f9',
+                  textAlign: 'center',
+                  fontSize: '0.9rem',
+                  color: '#64748b'
+                }}
+              >
+                Already have an account?{' '}
+                <Link
+                  to="/admin/login"
+                  style={{
+                    color: '#2563eb',
+                    fontWeight: 700,
+                    textDecoration: 'none'
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.textDecoration = 'underline')}
+                  onMouseLeave={(e) => (e.currentTarget.style.textDecoration = 'none')}
+                >
+                  Log In
+                </Link>
+              </div>
 
               {/* Trust Badge */}
               <div
@@ -467,7 +518,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: '0.375rem',
-                  marginTop: '1.5rem',
+                  marginTop: '1rem',
                   color: '#94a3b8',
                   fontSize: '0.75rem'
                 }}
@@ -485,4 +536,3 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ onLoginSuccess }) => {
     </div>
   );
 };
-

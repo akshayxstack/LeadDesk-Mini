@@ -79,6 +79,14 @@ export const api = {
     });
   },
 
+  // POST /api/auth/register
+  register: async (username: string, password: string): Promise<LoginResponse> => {
+    return request<LoginResponse>('/api/auth/register', {
+      method: 'POST',
+      body: JSON.stringify({ username, password })
+    });
+  },
+
   // GET /api/auth/me
   getMe: async (token: string): Promise<MeResponse> => {
     return request<MeResponse>('/api/auth/me', {
