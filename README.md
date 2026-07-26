@@ -1,7 +1,14 @@
 # LeadDesk Mini
 
 ## Status
-This project is currently verified and running on **localhost only** (backend on `http://localhost:5000`, frontend on `http://localhost:5173`) connected to a live **MongoDB Atlas** cloud database cluster. Full steps for local setup and cloud deployment are documented below.
+This project is live and fully deployed:
+- **Public Landing Page**: [https://leaddesk-mini.vercel.app](https://leaddesk-mini.vercel.app)
+- **Admin Dashboard**: [https://leaddesk-mini.vercel.app/admin](https://leaddesk-mini.vercel.app/admin)
+- **Backend API**: [https://leaddesk-mini.onrender.com](https://leaddesk-mini.onrender.com)
+- **Database**: MongoDB Atlas Cloud Cluster
+
+> [!NOTE]
+> **Render Free-Tier Cold Starts**: The backend is hosted on Render's free tier. If the service has spun down due to inactivity, initial requests (such as submitting a lead or logging into the admin portal) may experience a cold-start delay of ~50 seconds while the web service container spins up. Subsequent requests respond instantly.
 
 ## Project Overview
 LeadDesk Mini is a full-stack lead capture and management web application built for the Digital Heroes Full Stack Development task. It provides a public-facing landing page where prospective clients can submit inquiry leads, alongside a protected admin portal to view, search, and update lead statuses in real time.
@@ -107,7 +114,6 @@ MongoDB was selected because lead submissions are self-contained document payloa
 | Method | Route | Auth Required | Purpose |
 | :--- | :--- | :--- | :--- |
 | `POST` | `/api/auth/login` | No | Authenticates admin credentials and issues 1-hour JWT token |
-| `POST` | `/api/auth/register` | No | Registers new admin account and issues JWT token |
 | `GET` | `/api/auth/me` | Yes | Verifies current JWT token and returns admin profile |
 | `POST` | `/api/leads` | No | Validates and saves public lead submission (rate-limited) |
 | `GET` | `/api/leads` | Yes | Retrieves all submitted leads with optional `?search=` filter |
